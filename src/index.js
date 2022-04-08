@@ -12,4 +12,4 @@ addTaskBtn.addEventListener('click', (event) => {
   list.newItem();
 });
 
-window.addEventListener('DOMContentLoaded', list.render(), list.checkboxsStatus(list.completedStausCheck()), list.deleteAllTasks());
+window.addEventListener('DOMContentLoaded', list.render(), list.checkboxsStatus(), list.deleteAllTasks());

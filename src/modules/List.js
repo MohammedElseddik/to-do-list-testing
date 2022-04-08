@@ -18,10 +18,9 @@ export default class List {
     this.ListObjects.push(new NewTask(inputValue, false));
     localStorage.setItem('list', JSON.stringify(this.ListObjects));
     this.render();
-    this.completedStausCheck();
   }
 
-  selectTask(event, listLi, verticalDotsIcon, trashIcon) {
+  selectTaskFeature(event, listLi, verticalDotsIcon, trashIcon) {
     if (event.target.classList.contains('list-description')) {
       listLi.classList.toggle('selected');
       trashIcon.classList.toggle('hidden');
@@ -32,6 +31,8 @@ export default class List {
       });
     } else if (event.target.classList.contains('trash-icon')) {
       this.deleteTask(listLi, trashIcon);
+    } else if (event.target.classList.contains('checkbox')) {
+      this.completedStausCheck(event.target);
     }
   }
 
@@ -40,7 +41,6 @@ export default class List {
     listLi.remove();
     localStorage.setItem('list', JSON.stringify(this.ListObjects));
     this.render();
-    this.completedStausCheck();
   }
 
   editTask(eventTarget, inputValue) {
@@ -48,76 +48,68 @@ export default class List {
     localStorage.setItem('list', JSON.stringify(this.ListObjects));
   }
 
-  completedStausCheck() {
+  completedStausCheck(clickedBox) {
+    if (clickedBox.checked) {
+      this.ListObjects[parseInt(clickedBox.id, 10) - 1].completed = true;
+      clickedBox.parentElement.classList.add('line');
+    } else {
+      this.ListObjects[parseInt(clickedBox.id, 10) - 1].completed = false;
+      clickedBox.parentElement.classList.remove('line');
+    }
+
+    localStorage.setItem('list', JSON.stringify(this.ListObjects));
+    this.checkboxsStatus(clickedBox);
+  }
+
+  checkboxsStatus() {
     const checkboxs = document.querySelectorAll('.checkbox');
-    checkboxs.forEach((element) => {
-      // localStorage.setItem(checkboxs[index].id, checkboxs[i].checked);
-      element.addEventListener('change', () => {
-        /* eslint-disable */
-                for (const listObject of this.ListObjects) {
-                    if (element.checked) {
-                        this.ListObjects[parseInt(element.id) - 1].completed = true;
-                        element.parentElement.classList.add('line');
-                    } else {
-                        this.ListObjects[parseInt(element.id) - 1].completed = false;
-                        element.parentElement.classList.remove('line');
-                    }
-                }
-                localStorage.setItem('list', JSON.stringify(this.ListObjects));
-            });
-        })
-        this.checkboxsStatus(checkboxs);
-        return checkboxs;
+    /* eslint-disable */
+    for (const item of this.ListObjects) {
+      if (item.completed === true) {
+        checkboxs[item.index - 1].setAttribute('checked', '');
+        checkboxs[item.index - 1].parentElement.classList.add('line');
+      } else if (item.completed === false) {
+        checkboxs[item.index - 1].removeAttribute('checked', '');
+        checkboxs[item.index - 1].parentElement.classList.remove('line');
+      }
     }
+    this.addEventListnerClearBtn();
+  }
 
-    checkboxsStatus(checkboxs) {
-        /* eslint-disable */
-        for (const item of this.ListObjects) {
-            if (item.completed === true) {
-                checkboxs[item.index - 1].setAttribute('checked', '');
-                checkboxs[item.index - 1].parentElement.classList.add('line');
-            } else if (item.completed === false) {
-                checkboxs[item.index - 1].removeAttribute('checked', '');
-                checkboxs[item.index - 1].parentElement.classList.remove('line');
-            }
-        }
-        this.clearCompletedTasks();
-    }
+  addEventListnerClearBtn() {
+    const clearBtn = document.querySelector('.clear-btn');
+    clearBtn.addEventListener('click', () => {this.clearCompletedTasks()});
+  }
 
-    clearCompletedTasks() {
-        const clearBtn = document.querySelector('.clear-btn');
-        clearBtn.addEventListener('click', () => {
-            this.ListObjects = this.ListObjects.filter((item) => {
-                return item.completed === false;
-            })
-            localStorage.setItem('list', JSON.stringify(this.ListObjects));
-            this.render();
-        })
-    }
+  clearCompletedTasks() {
+    this.ListObjects = this.ListObjects.filter((item) => { return item.completed === false });
+    localStorage.setItem('list', JSON.stringify(this.ListObjects));
+    this.render();
+  }
 
-    deleteAllTasks() {
-        const deleteAllBtn = document.querySelector('.refresh');
-        deleteAllBtn.addEventListener('click', (event) => {
-            event.preventDefault();
-            this.ListObjects = [];
-            localStorage.setItem('list', JSON.stringify(this.ListObjects));
-            this.render();
-        })
-    }
+  deleteAllTasks() {
+    const deleteAllBtn = document.querySelector('.refresh');
+    deleteAllBtn.addEventListener('click', (event) => {
+      event.preventDefault();
+      this.ListObjects = [];
+      localStorage.setItem('list', JSON.stringify(this.ListObjects));
+      this.render();
+    })
+  }
 
-    render() {
-        const listBody = document.querySelector('.tasks-body');
-        listBody.innerHTML = '';
-        /* eslint-disable */
-        for (const [i, listObject] of this.ListObjects.entries()) {
-            listObject.index = i + 1;
-            const listItem = new ListItem(listObject);
-            const listLi = listItem.render(i);
-            listBody.appendChild(listLi);
-            const verticalDotsIcon = listLi.querySelector('.vertical-dots-icon');
-            const trashIcon = listLi.querySelector('.trash-icon');
-            listLi.addEventListener('click', (event) => { this.selectTask(event, listLi, verticalDotsIcon, trashIcon) });
-            //localStorage.setItem('list', JSON.stringify(this.ListObjects));
-        }
+  render() {
+    const listBody = document.querySelector('.tasks-body');
+    listBody.innerHTML = '';
+    /* eslint-disable */
+    for (const [i, listObject] of this.ListObjects.entries()) {
+      listObject.index = i + 1;
+      const listItem = new ListItem(listObject);
+      const listLi = listItem.render(i);
+      listBody.appendChild(listLi);
+      const verticalDotsIcon = listLi.querySelector('.vertical-dots-icon');
+      const trashIcon = listLi.querySelector('.trash-icon');
+      listLi.addEventListener('click', (event) => { this.selectTaskFeature(event, listLi, verticalDotsIcon, trashIcon) });
+      localStorage.setItem('list', JSON.stringify(this.ListObjects));
     }
+  }
 }

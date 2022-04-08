@@ -75,3 +75,56 @@ describe('addTasks and deleteTasks functions test', () => {
     expect(localStorage.getItem('list')).not.toBeNull();
   });
 });
+
+describe('edit task description, update item status and clear all completed functions', () => {
+  // test for the eddit task method
+  test('test for the edit task function', () => {
+    const list = new List();
+
+    // Sellect all the lask descriptions
+    const tasksDescriptions = document.querySelectorAll('.tasks-body li .list-description');
+
+    // Edit the first task
+    list.editTask(tasksDescriptions[0], 'edited-task1');
+
+    // Edit the second task
+    list.editTask(tasksDescriptions[1], 'edited-task2');
+
+    // Check if the new task has been pushed to the listObject array
+    expect(list.ListObjects[0].description).toMatch(/edited/);
+    expect(list.ListObjects[1].description).toMatch(/edited/);
+  });
+
+  test('check completed tasks', () => {
+    const list = new List();
+
+    // Sellect all the checkboxs
+    const checkboxs = document.querySelectorAll('.checkbox');
+
+    // Sellect the first checkbox
+    const completedTask = checkboxs[0];
+
+    // Set the checked attribute for the first checbox
+    completedTask.setAttribute('checked', '');
+
+    // Update the first task completed property to true
+    list.completedStausCheck(completedTask);
+
+    // Check if the first task completed has true value
+    expect(list.ListObjects[0].completed).toBe(true);
+
+    // Check the second task completed has false value
+    expect(list.ListObjects[1].completed).toBe(false);
+  });
+
+  test('clear all completed tasks', () => {
+    const list = new List();
+
+    // Delete task that has completed property seted to true
+    list.clearCompletedTasks();
+
+    // Check if the completed task deleted
+    // it should delete one task which has true value for the completed property
+    expect(list.ListObjects.length).toBe(3);
+  });
+});
