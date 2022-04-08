@@ -75,3 +75,23 @@ describe('addTasks and deleteTasks functions test', () => {
     expect(localStorage.getItem('list')).not.toBeNull();
   });
 });
+
+describe('edit task description, update item status and clear all completed functions', () => {
+  // test for the eddit task method
+  test('test for the edit task function', () => {
+    const list = new List();
+
+    // Sellect all the lask descriptions
+    const tasksDescriptions = document.querySelectorAll('.tasks-body li .list-description');
+
+    // Edit the first task
+    list.editTask(tasksDescriptions[0], 'edited-task1');
+
+    // Edit the second task
+    list.editTask(tasksDescriptions[1], 'edited-task2');
+    
+    // Check if the new task has been pushed to the listObject array
+    expect(list.ListObjects[0].description).toMatch(/edited/);
+    expect(list.ListObjects[1].description).toMatch(/edited/);
+  });
+});
