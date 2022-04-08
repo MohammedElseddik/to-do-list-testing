@@ -1,7 +1,7 @@
 /**
  * @jest-environment jsdom
  */
-import List from '../modules/List';
+import List from '../modules/List.js';
 
 document.body.innerHTML = `
                             <main>
@@ -38,15 +38,17 @@ describe('addTasks and deleteTasks functions test', () => {
     list.addTask('task2');
     list.addTask('task3');
     list.addTask('task4');
+    list.addTask('task5');
+    list.addTask('task6');
 
     // Select alll the task list elemet
     const taskList = document.querySelectorAll('.tasks-body li');
 
     // Check if the new task has been pushed to the listObject array
-    expect(list.ListObjects.length).toBe(4);
+    expect(list.ListObjects.length).toBe(6);
 
     // Check if the taks added to the UI
-    expect(taskList).toHaveLength(4);
+    expect(taskList).toHaveLength(6);
 
     // Check if the lacalstorage is update or it is null
     expect(localStorage.getItem('list')).not.toBeNull();
@@ -64,10 +66,10 @@ describe('addTasks and deleteTasks functions test', () => {
     list.deleteTask(taskList[0], trashIcon[0]);
 
     // Check if the tasks removed from the UI
-    expect(document.querySelectorAll('.tasks-body li')).toHaveLength(2);
+    expect(document.querySelectorAll('.tasks-body li')).toHaveLength(4);
 
     // Check if the tasks has benn removed form the listObject array
-    expect(list.ListObjects.length).toBe(2);
+    expect(list.ListObjects.length).toBe(4);
 
     //  Check if the Local storage is updated or it is null
     expect(localStorage.getItem('list')).not.toBeNull();
