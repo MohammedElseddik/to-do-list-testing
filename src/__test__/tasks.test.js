@@ -89,9 +89,32 @@ describe('edit task description, update item status and clear all completed func
 
     // Edit the second task
     list.editTask(tasksDescriptions[1], 'edited-task2');
-    
+
     // Check if the new task has been pushed to the listObject array
     expect(list.ListObjects[0].description).toMatch(/edited/);
     expect(list.ListObjects[1].description).toMatch(/edited/);
+  });
+
+  test('check completed tasks', () => {
+    const list = new List();
+
+    // Sellect all the checkboxs
+    const checkboxs = document.querySelectorAll('.checkbox');
+
+    // Sellect the first checkbox
+    const completedTask = checkboxs[0];
+
+    // Set the checked attribute for the first checbox
+    completedTask.setAttribute('checked', '');
+
+    // Update the first task completed property to true
+    list.completedStausCheck(completedTask);
+    console.log(list.ListObjects);
+
+    // Check if the first task completed has true value
+    expect(list.ListObjects[0].completed).toBe(true);
+
+    // Check the second task completed has false value
+    expect(list.ListObjects[1].completed).toBe(false);
   });
 });
