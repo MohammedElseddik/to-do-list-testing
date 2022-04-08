@@ -53,6 +53,7 @@ describe('addTasks and deleteTasks functions test', () => {
   });
 
   test('test the deleteTasks function', () => {
+    
     const list = new List();
     const taskList = document.querySelectorAll('.tasks-body li');
     const trashIcon = document.querySelectorAll('.trash-icon');
