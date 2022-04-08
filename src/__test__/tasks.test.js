@@ -109,12 +109,22 @@ describe('edit task description, update item status and clear all completed func
 
     // Update the first task completed property to true
     list.completedStausCheck(completedTask);
-    console.log(list.ListObjects);
 
     // Check if the first task completed has true value
     expect(list.ListObjects[0].completed).toBe(true);
 
     // Check the second task completed has false value
     expect(list.ListObjects[1].completed).toBe(false);
+  });
+
+  test('clear all completed tasks', () => {
+    const list = new List();
+
+    // Delete task that has completed property seted to true
+    list.clearCompletedTasks();
+
+    // Check if the completed task deleted
+    // it should delete one task which has true value for the completed property
+    expect(list.ListObjects.length).toBe(3);
   });
 });
