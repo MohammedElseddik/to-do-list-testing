@@ -12,20 +12,24 @@ export default class List {
     if (addTaskInput.trim().length === 0) return;
     this.addTask(addTaskInput);
     listform.reset();
-}
+  }
 
-addTask(inputValue) {
+  addTask(inputValue) {
     this.ListObjects.push(new NewTask(inputValue, false));
     localStorage.setItem('list', JSON.stringify(this.ListObjects));
     this.render();
     this.completedStausCheck();
-    }
+  }
 
   selectTask(event, listLi, verticalDotsIcon, trashIcon) {
     if (event.target.classList.contains('list-description')) {
       listLi.classList.toggle('selected');
       trashIcon.classList.toggle('hidden');
-      this.editTask(event.target);
+      event.target.toggleAttribute('readonly');
+      event.target.addEventListener('keyup', () => {
+        const inputValue = event.target.value;
+        this.editTask(event.target, inputValue);
+      });
     } else if (event.target.classList.contains('trash-icon')) {
       this.deleteTask(listLi, trashIcon);
     }
@@ -39,25 +43,17 @@ addTask(inputValue) {
     this.completedStausCheck();
   }
 
-  editTask(editEventTarget) {
-    editEventTarget.toggleAttribute('readonly');
-    editEventTarget.addEventListener('keyup', () => {
-      /* eslint-disable */
-            for (const [i, item] of this.ListObjects.entries()) {
-                if (parseInt(editEventTarget.parentElement.id) === i) {
-                    item.description = editEventTarget.value;
-                }
-            }
-            localStorage.setItem('list', JSON.stringify(this.ListObjects));
-        });
-    }
+  editTask(eventTarget, inputValue) {
+    this.ListObjects[parseInt(eventTarget.parentElement.id, 10)].description = inputValue;
+    localStorage.setItem('list', JSON.stringify(this.ListObjects));
+  }
 
-    completedStausCheck() {
-        const checkboxs = document.querySelectorAll('.checkbox');
-        checkboxs.forEach((element, index) => {
-            //localStorage.setItem(checkboxs[index].id, checkboxs[i].checked);
-            element.addEventListener('change', () => {
-                /* eslint-disable */
+  completedStausCheck() {
+    const checkboxs = document.querySelectorAll('.checkbox');
+    checkboxs.forEach((element) => {
+      // localStorage.setItem(checkboxs[index].id, checkboxs[i].checked);
+      element.addEventListener('change', () => {
+        /* eslint-disable */
                 for (const listObject of this.ListObjects) {
                     if (element.checked) {
                         this.ListObjects[parseInt(element.id) - 1].completed = true;
@@ -112,7 +108,6 @@ addTask(inputValue) {
     render() {
         const listBody = document.querySelector('.tasks-body');
         listBody.innerHTML = '';
-        console.log(this.ListObjects);
         /* eslint-disable */
         for (const [i, listObject] of this.ListObjects.entries()) {
             listObject.index = i + 1;
