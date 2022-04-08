@@ -51,25 +51,4 @@ describe('addTasks and deleteTasks functions test', () => {
     // Check if the lacalstorage is update or it is null
     expect(localStorage.getItem('list')).not.toBeNull();
   });
-
-  test('test the deleteTasks function', () => {
-    const list = new List();
-    const taskList = document.querySelectorAll('.tasks-body li');
-    const trashIcon = document.querySelectorAll('.trash-icon');
-
-    // Delete the first elemet of the list
-    list.deleteTask(taskList[0], trashIcon[0]);
-
-    // Delete the second elemet of the list
-    list.deleteTask(taskList[0], trashIcon[0]);
-
-    // Check if the tasks removed from the UI
-    expect(document.querySelectorAll('.tasks-body li')).toHaveLength(2);
-
-    // Check if the tasks has benn removed form the listObject array
-    expect(list.ListObjects.length).toBe(2);
-
-    //  Check if the Local storage is updated or it is null
-    expect(localStorage.getItem('list')).not.toBeNull();
-  });
 });
