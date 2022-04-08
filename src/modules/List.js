@@ -12,14 +12,14 @@ export default class List {
     if (addTaskInput.trim().length === 0) return;
     this.addTask(addTaskInput);
     listform.reset();
-}
+  }
 
-addTask(inputValue) {
+  addTask(inputValue) {
     this.ListObjects.push(new NewTask(inputValue, false));
     localStorage.setItem('list', JSON.stringify(this.ListObjects));
     this.render();
     this.completedStausCheck();
-    }
+  }
 
   selectTask(event, listLi, verticalDotsIcon, trashIcon) {
     if (event.target.classList.contains('list-description')) {
@@ -112,7 +112,6 @@ addTask(inputValue) {
     render() {
         const listBody = document.querySelector('.tasks-body');
         listBody.innerHTML = '';
-        console.log(this.ListObjects);
         /* eslint-disable */
         for (const [i, listObject] of this.ListObjects.entries()) {
             listObject.index = i + 1;

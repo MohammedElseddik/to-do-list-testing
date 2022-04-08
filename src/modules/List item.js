@@ -1,6 +1,5 @@
-import verticalDotsIcon from '../img/vertical dots.svg';
-import trashIcon from '../img/trash icon.svg';
-
+const threedot = 'https://cdn.icon-icons.com/icons2/2550/PNG/512/dots_vertical_icon_152628.png';
+const trashscr = 'https://img.icons8.com/material/344/trash--v1.png';
 export default class ListItem {
   constructor(newTask) {
     this.listItem = newTask;
@@ -24,11 +23,11 @@ export default class ListItem {
     const verticalDots = new Image();
     verticalDots.classList = 'vertical-dots-icon';
     verticalDots.id = index;
-    verticalDots.src = verticalDotsIcon;
+    verticalDots.src = threedot;
     const trash = new Image();
-    trash.className = 'trash-icon hidden';
+    trash.src = trashscr;
     trash.id = index;
-    trash.src = trashIcon;
+    trash.className = 'trash-icon hidden';
     listLi.appendChild(checkboxIcon);
     listLi.appendChild(listLiInput);
     listLi.appendChild(saveBtn);
