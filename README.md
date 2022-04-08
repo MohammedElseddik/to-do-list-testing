@@ -1,6 +1,12 @@
 # to-do-list-project
 
 "To-do list" is a tool that helps to organize your daily activities. It simply lists the things that you need to do and allows you to mark them as complete and the delete the completed tasks.
+apply unit testing using jest to check:
+- add functions.
+- remove function.
+- Edit task function.
+- Update task status function.
+- Clear all completed tasks functions.
 
 ## Major languages
 
@@ -9,6 +15,7 @@
 - javaScript classes
 - JavaScript (ES6 syntax and Modules)
 - Webpack
+- Unit testing using jest 
 
 ## Getting Started
 
